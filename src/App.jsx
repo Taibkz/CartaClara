@@ -31,13 +31,25 @@ import { analizarDocumento, MOCK_DOCUMENTS } from "./services/gemini";
 import AudioPlayer from "./components/AudioPlayer";
 import LanguageSelector from "./components/LanguageSelector";
 
-// Custom SVG Logo Component: Represents an envelope + magnifying glass + glowing AI scan core
 const BrandLogo = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
-    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M22 6L12 13L2 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="12" cy="13" r="4.5" fill="#8b5cf6" fillOpacity="0.5" stroke="#a78bfa" strokeWidth="1.5"/>
-    <line x1="15" y1="16" x2="18.5" y2="19.5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+    <defs>
+      <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#c084fc" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+      <linearGradient id="glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="rgba(192, 132, 252, 0.25)" />
+        <stop offset="100%" stopColor="rgba(59, 130, 246, 0.05)" />
+      </linearGradient>
+    </defs>
+    {/* Geometric Outer Shield/Envelope Frame */}
+    <path d="M3 7.5C3 5.567 4.567 4 6.5 4H21.5C23.433 4 25 5.567 25 7.5V20.5C25 22.433 23.433 24 21.5 24H6.5C4.567 24 3 22.433 3 20.5V7.5Z" fill="url(#glow-grad)" stroke="url(#logo-grad)" strokeWidth="1.75" />
+    {/* Clean Envelope fold details */}
+    <path d="M4 6.5L14 13.5L24 6.5" stroke="#ffffff" strokeOpacity="0.6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    {/* Floating glowing AI search core */}
+    <circle cx="14" cy="14" r="5" fill="#06b6d4" fillOpacity="0.25" stroke="#06b6d4" strokeWidth="1.5" style={{ filter: "drop-shadow(0 0 6px rgba(6, 182, 212, 0.6))" }} />
+    <path d="M14 11.5V16.5M11.5 14H16.5" stroke="#ffffff" strokeWidth="1.25" strokeLinecap="round" />
   </svg>
 );
 
@@ -52,6 +64,7 @@ export default function App() {
   // Views: 'home' (dashboard/history), 'scan' (camera/file-drop), 'loading' (processing animation), 'result' (detailed info)
   const [currentView, setCurrentView] = useState("home"); 
   const [historial, setHistorial] = useState([]);
+  const [showEventDrawer, setShowEventDrawer] = useState(false);
   
   // Document Scan States
   const [selectedFile, setSelectedFile] = useState(null);
@@ -420,6 +433,45 @@ export default function App() {
             </p>
           </div>
 
+          {/* IMPACT TRACKER - SOCIAL BENEFIT STATISTICS */}
+          <div className="impact-tracker-grid">
+            <div className="impact-card">
+              <div className="impact-header">
+                <FileText size={14} className="impact-icon-purple" />
+                <span className="impact-stat-label">Documentos</span>
+              </div>
+              <span className="impact-stat-val">+14k</span>
+              <span className="impact-stat-desc">Traducciones sencillas</span>
+            </div>
+            
+            <div className="impact-card">
+              <div className="impact-header">
+                <ShieldAlert size={14} className="impact-icon-danger" />
+                <span className="impact-stat-label">Estafas</span>
+              </div>
+              <span className="impact-stat-val">82%</span>
+              <span className="impact-stat-desc">Phishing postal detectado</span>
+            </div>
+            
+            <div className="impact-card">
+              <div className="impact-header">
+                <Tag size={14} className="impact-icon-safe" />
+                <span className="impact-stat-label">Ahorro</span>
+              </div>
+              <span className="impact-stat-val">+28k€</span>
+              <span className="impact-stat-desc">En recargos e intereses</span>
+            </div>
+            
+            <div className="impact-card">
+              <div className="impact-header">
+                <Sparkles size={14} className="impact-icon-cyan" />
+                <span className="impact-stat-label">Comprensión</span>
+              </div>
+              <span className="impact-stat-val">4.5x</span>
+              <span className="impact-stat-desc">Mayor claridad e inclusión</span>
+            </div>
+          </div>
+
           {/* Historial de cartas procesadas */}
           <div className="history-section">
             <h3 style={{ fontSize: "0.95rem", color: "#fff", display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "700" }}>
@@ -444,7 +496,7 @@ export default function App() {
                       <span className="history-meta" style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                         <Clock size={10} /> {item.fechaEscaneo} 
                         {item.montoAPagar > 0 && (
-                          <span style={{ display: "flex", alignItems: "center", gap: "0.2rem", marginLeft: "0.3rem", color: "var(--color-danger)" }}>
+                           <span style={{ display: "flex", alignItems: "center", gap: "0.2rem", marginLeft: "0.3rem", color: "var(--color-danger)" }}>
                             <Tag size={10} /> {item.montoAPagar}€
                           </span>
                         )}
@@ -466,11 +518,22 @@ export default function App() {
             )}
           </div>
 
-          <div className="promo-box">
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.5rem" }}>
-              <Award size={18} style={{ color: "#fbbf24" }} />
+          {/* BANNER INTERACTIVO: SUMMER OF CODE GRANADA */}
+          <div 
+            onClick={() => setShowEventDrawer(true)} 
+            className="soc-event-banner"
+          >
+            <div className="soc-banner-glow" />
+            <div className="soc-banner-content">
+              <div className="soc-badge">
+                <Award size={12} fill="currentColor" />
+                <span>Summer of Code Granada</span>
+              </div>
+              <div className="soc-text-wrap">
+                <h4 className="soc-banner-title">Proyecto Social de Impacto</h4>
+                <p className="soc-banner-subtitle">Conoce el impacto social y visión de CartaClara en Granada ➜</p>
+              </div>
             </div>
-            <strong>¿Por qué CartaClara?</strong> Apoya a personas mayores contra la exclusión digital y asiste a inmigrantes traduciendo cartas a su idioma nativo de forma clara y accesible.
           </div>
 
           {/* Botón flotante/principal para escanear */}
@@ -520,6 +583,14 @@ export default function App() {
                 />
                 {/* Animación láser decorativa de escaneo */}
                 <div className="laser-line" />
+                
+                {/* HUD de Escaneo Holográfico */}
+                <div className="scanner-hud-overlay">
+                  <div className="hud-target-lock" />
+                  <div className="hud-laser-indicator">MODO ESCÁNER EN VIVO</div>
+                  <span className="hud-text-left">ISO 400</span>
+                  <span className="hud-text-right">OCR ACTIVE</span>
+                </div>
                 
                 <div style={{ position: "absolute", bottom: "1.25rem", left: "0", right: "0", display: "flex", justifyContent: "center", gap: "1rem", zIndex: 12 }}>
                   <button 
@@ -775,6 +846,77 @@ export default function App() {
               <span>Escanear otro documento</span>
             </button>
 
+          </div>
+        </div>
+      )}
+
+      {/* DRAWER INTERACTIVO EVENTO SUMMER OF CODE */}
+      {showEventDrawer && (
+        <div className="drawer-overlay" onClick={() => setShowEventDrawer(false)}>
+          <div className="drawer-content" onClick={(e) => e.stopPropagation()}>
+            <div className="drawer-drag-handle" />
+            <div className="drawer-header">
+              <div className="brand">
+                <div className="brand-icon" style={{ width: "36px", height: "36px", borderRadius: "10px" }}>
+                  <BrandLogo />
+                </div>
+                <div>
+                  <h3 className="brand-name" style={{ fontSize: "1.1rem" }}>CartaClara</h3>
+                  <span className="brand-badge" style={{ fontSize: "0.58rem" }}>Summer of Code Granada</span>
+                </div>
+              </div>
+              <button className="drawer-close-btn" onClick={() => setShowEventDrawer(false)}>
+                &times;
+              </button>
+            </div>
+            
+            <div className="drawer-body">
+              <div className="soc-highlight-box">
+                <div style={{ fontSize: "0.82rem", fontWeight: "700", color: "#fbbf24", display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.4rem" }}>
+                  <Award size={14} /> Candidata a la Beca de Impacto Social (3.000€)
+                </div>
+                <p style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}>
+                  CartaClara es un proyecto con <strong>presupuesto inicial de 0€</strong> diseñado en Granada con el propósito de romper la brecha digital y la exclusión de personas vulnerables (tercera edad, inmigrantes) frente al lenguaje administrativo, burocrático y legal español.
+                </p>
+              </div>
+
+              <div className="drawer-section">
+                <h4 className="drawer-sec-title">Problemas Sociales que Resuelve:</h4>
+                <div className="drawer-bullet">
+                  <div className="bullet-dot bg-danger" />
+                  <div>
+                    <strong>Exclusión Digital en la Tercera Edad:</strong> Las notificaciones del ayuntamiento o de la seguridad social causan estrés y miedo a los mayores por sus plazos y tecnicismos.
+                  </div>
+                </div>
+                <div className="drawer-bullet">
+                  <div className="bullet-dot bg-warning" />
+                  <div>
+                    <strong>Barrera Idiomática y Asistencia Social:</strong> Permite traducir notificaciones vitales a árabe, inglés, francés, rumano o chino de forma instantánea y con audio-lectura.
+                  </div>
+                </div>
+                <div className="drawer-bullet">
+                  <div className="bullet-dot bg-fraud" />
+                  <div>
+                    <strong>Phishing y Estafas Postales:</strong> Identifica cartas maliciosas de Correos o multas de tránsito falsas creadas para robar datos de tarjetas.
+                  </div>
+                </div>
+              </div>
+
+              <div className="drawer-section">
+                <h4 className="drawer-sec-title">Viabilidad y Sostenibilidad:</h4>
+                <p style={{ fontSize: "0.78rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                  Alojada de forma 100% serverless a <strong>coste cero</strong> en Vercel, utiliza el modelo gratuito Gemini 2.5 Flash en localizaciones del cliente. Es una PWA (Progressive Web App) instalable en iOS y Android sin pasar por App Stores, y es integrable con Capacitor.js para generar archivos nativos APK/Xcode de inmediato.
+                </p>
+              </div>
+
+              <button 
+                onClick={() => setShowEventDrawer(false)} 
+                className="btn-scan-main"
+                style={{ marginTop: "1rem", padding: "0.85rem" }}
+              >
+                <span>¡Entendido! Volver a la App</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
