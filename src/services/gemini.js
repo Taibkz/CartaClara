@@ -188,6 +188,8 @@ export const analizarDocumento = async (file, apiKey, isDemoMode = false, mockKe
     }
 
     Es sumamente importante que el tono de 'resumenHumano' sea claro, tranquilizador, empático y directo. Si hay un pago obligatorio, explícalo sin rodeos. Si es una estafa, enciende todas las alarmas en el resumen.
+
+    CRITICAL: No utilices NINGÚN emoji en ninguna de las respuestas de texto del objeto JSON (como resumenHumano, tipoDocumento o accionesRequeridas). Toda la redacción debe ser sobria, limpia y profesional, ya que la aplicación se encarga de inyectar los iconos de interfaz nativos correspondientes.
     `;
 
     const result = await model.generateContent([systemPrompt, imagePart]);

@@ -66,8 +66,10 @@ export default function AudioPlayer({ text, isEstafa }) {
   if (!isSupported) {
     return (
       <div className="audio-player-bar" style={{ opacity: 0.6, cursor: "not-allowed" }}>
-        <span className="audio-status">🎙️ Audio no soportado en este móvil</span>
-        <VolumeX size={18} />
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <VolumeX size={18} style={{ color: "var(--text-muted)" }} />
+          <span className="audio-status">Audio no soportado en este dispositivo</span>
+        </div>
       </div>
     );
   }
